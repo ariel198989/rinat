@@ -1,4 +1,4 @@
-<html><head><base href="https://achrayee.org/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ארגון אחריי - דף נחיתה למשרות</title><style>
+<html><head><base href="https://achrayee.org/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>אחריי! לקריירה - שאלון מקדים עבורך</title><style>
     @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap');
 
     :root {
@@ -235,20 +235,51 @@
     }
 
     @media (max-width: 768px) {
+        .logo-container {
+            flex-direction: column;
+        }
+        .logo-container div {
+            width: 150px;
+            height: 150px;
+            margin: 10px 0;
+        }
         .container {
-            padding: 15px;
+            padding: 10px;
         }
-
         h1 {
-            font-size: 2.5em;
+            font-size: 2em;
         }
-
-        select {
-            width: 90%;
+        header p {
+            font-size: 1em;
+            padding: 0 15px;
         }
-
+        #job-category,
+        #job-type,
+        #specific-job,
+        #custom-job,
+        #personal-form input,
+        #personal-form textarea {
+            width: 100%;
+            max-width: none;
+        }
         .job-details {
             padding: 20px;
+        }
+        h2 {
+            font-size: 1.8em;
+        }
+        ul {
+            flex-direction: column;
+        }
+        li {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .apply-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
         }
     }
 
@@ -278,7 +309,7 @@
 
     @media (max-width: 768px) {
         #job-type {
-            width: 90%;
+            width: 100%;
         }
     }
 
@@ -309,7 +340,7 @@
 
     @media (max-width: 768px) {
         #specific-job {
-            width: 90%;
+            width: 100%;
         }
     }
 
@@ -335,7 +366,7 @@
 
     @media (max-width: 768px) {
         #custom-job {
-            width: 90%;
+            width: 100%;
         }
     }
 </style></head><body>
@@ -349,8 +380,8 @@
                     <img src="https://scontent.ftlv6-1.fna.fbcdn.net/v/t39.30808-6/358150817_594305346241753_3754687395705233988_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=7rBO_xBB-hUQ7kNvgEPHaqb&_nc_ht=scontent.ftlv6-1.fna&oh=00_AYCI_JO71VCaQWPd9CyLvYZFp99b2RgVK8Q1nrDST1kYug&oe=66F5B650" alt="לוגו נוסף" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
             </div>
-            <h1></h1>
-            <p>הצטרפו אלינו לקריירה משמעותית בשירות הציבורי ותהיו חלק מהשינוי שאתם רוצים לראות, עם ליווי תעסוקתי אישי מקיף הכולל כתיבת קו"ח, בירור צרכים והכנה לראיונות עבודה.</p>
+            <h1>אחריי! לקריירה</h1>
+            <p>השאירו פרטים ראשוניים לליווי תעסוקתי אישי ומקיף מקצה לקצה</p>
         </div>
     </header>
 
@@ -470,7 +501,7 @@
             if (selectedCategory === 'custom') {
                 customJobInput.style.display = 'block';
                 specificJobSelect.style.display = 'none';
-            } else if (selectedCategory) {
+            } else if (selectedCategory && jobCategories[selectedCategory]) {
                 customJobInput.style.display = 'none';
                 specificJobSelect.style.display = 'block';
                 populateSpecificJobs(selectedCategory);
@@ -478,7 +509,7 @@
                 customJobInput.style.display = 'none';
                 specificJobSelect.style.display = 'none';
             }
-            if (selectedCategory) {
+            if (selectedCategory && jobCategories[selectedCategory]) {
                 const category = jobCategories[selectedCategory];
                 jobTitle.textContent = category.title;
                 jobList.innerHTML = '';
@@ -490,9 +521,20 @@
                 jobDetails.style.display = 'block';
                 jobDetails.style.opacity = '0';
                 setTimeout(() => {
+                    jobDetails.style.display = 'block';
                     jobDetails.style.opacity = '1';
                 }, 50);
                 updateWhatsAppLink(category.title);
+            } else if (selectedCategory === 'custom') {
+                jobTitle.textContent = 'משרה מותאמת אישית';
+                jobList.innerHTML = '';
+                jobDetails.style.display = 'block';
+                jobDetails.style.opacity = '0';
+                setTimeout(() => {
+                    jobDetails.style.display = 'block';
+                    jobDetails.style.opacity = '1';
+                }, 50);
+                updateWhatsAppLink('משרה מותאמת אישית');
             } else {
                 jobDetails.style.opacity = '0';
                 setTimeout(() => {
@@ -512,12 +554,12 @@
         }
 
         jobTypeSelect.addEventListener('change', function() {
-            const categoryTitle = jobCategories[jobSelect.value].title;
+            const categoryTitle = jobCategories[jobSelect.value] ? jobCategories[jobSelect.value].title : '';
             updateWhatsAppLink(categoryTitle);
         });
 
         specificJobSelect.addEventListener('change', function() {
-            const categoryTitle = jobCategories[jobSelect.value].title;
+            const categoryTitle = jobCategories[jobSelect.value] ? jobCategories[jobSelect.value].title : '';
             updateWhatsAppLink(categoryTitle);
         });
 
@@ -560,7 +602,7 @@
         applyBtn.addEventListener('click', function(e) {
             e.preventDefault();
             if (document.getElementById('personal-form').checkValidity()) {
-                updateWhatsAppLink(jobCategories[jobSelect.value].title);
+                updateWhatsAppLink(jobCategories[jobSelect.value] ? jobCategories[jobSelect.value].title : '');
                 window.open(this.href, '_blank');
             } else {
                 alert('אנא מלא את כל השדות הנדרשים');
@@ -570,7 +612,7 @@
         const formFields = ['full-name', 'email', 'phone', 'city', 'experience'];
         formFields.forEach(fieldId => {
             document.getElementById(fieldId).addEventListener('input', function() {
-                if (jobSelect.value) {
+                if (jobSelect.value && jobCategories[jobSelect.value]) {
                     updateWhatsAppLink(jobCategories[jobSelect.value].title);
                 }
             });
